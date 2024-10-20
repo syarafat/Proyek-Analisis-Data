@@ -15,11 +15,11 @@ st.set_page_config(
 def load_data():
     df = pd.read_csv('data/day.csv')
     
-    # Konversi kolom season ke nama musim
+    # Correct the mapping of season to season_name
     season_mapping = {1: 'Spring', 2: 'Summer', 3: 'Fall', 4: 'Winter'}
-    df['season_name'] = df['season_name'].map(season_mapping)
+    df['season_name'] = df['season'].map(season_mapping)
     
-    # Konversi kolom weekday ke nama hari
+    # Map weekdays to names
     weekday_mapping = {
         0: 'Sunday', 1: 'Monday', 2: 'Tuesday', 
         3: 'Wednesday', 4: 'Thursday', 5: 'Friday', 
@@ -27,7 +27,7 @@ def load_data():
     }
     df['weekday_name'] = df['weekday'].map(weekday_mapping)
     
-    # Pastikan kolom dteday dikonversi menjadi datetime
+    # Ensure date column is in datetime format
     df['dteday'] = pd.to_datetime(df['dteday'])
     
     return df
