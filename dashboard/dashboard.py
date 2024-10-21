@@ -68,6 +68,22 @@ ax_season.set_ylabel('Rata-rata Penyewaan')
 plt.xticks(rotation=0)
 st.pyplot(fig_season)
 
+# Grafik penyewaan berdasarkan hari kerja
+fig_workingday, ax_workingday = plt.subplots(figsize=(10, 6))
+sns.barplot(x='workingday', y='cnt', data=df, ax=ax_workingday)
+ax_workingday.set_title('Penyewaan Berdasarkan Hari Kerja')
+ax_workingday.set_xlabel('Hari Kerja')
+ax_workingday.set_ylabel('Rata-rata Penyewaan')
+st.pyplot(fig_workingday)
+
+# Grafik penyewaan berdasarkan cuaca
+fig_weathersit, ax_weathersit = plt.subplots(figsize=(10, 6))
+sns.barplot(x='weathersit', y='cnt', data=df, ax=ax_weathersit)
+ax_weathersit.set_title('Penyewaan Berdasarkan Cuaca')
+ax_weathersit.set_xlabel('Kondisi Cuaca')
+ax_weathersit.set_ylabel('Rata-rata Penyewaan')
+st.pyplot(fig_weathersit)
+
 # Insight musiman
 st.info(f"""
     💡 Insight Musiman:
@@ -76,19 +92,36 @@ st.info(f"""
     - Variasi antar musim: {(seasonal_avg.max() - seasonal_avg.min()) / seasonal_avg.mean() * 100:.1f}%
 """)
 
-# Time Series Analysis
-st.header('Time Series Analysis')
+# analisis pengaruh perubahan cuaca dan suhu
+st.header('Analisis Pengaruh Cuaca dan Suhu')
 
 # Menghitung recency, frequency, dan monetary
 df['recency'] = (df['dteday'].max() - df['dteday']).dt.days  # Hitung jumlah hari sejak pembelian terakhir
 df['frequency'] = df.groupby('instant')['cnt'].transform('count')  # Hitung frekuensi transaksi
 df['monetary'] = df['cnt']  # Gunakan jumlah penyewaan sebagai proxy untuk monetary value
 
+# Visualisasi Pengaruh Suhu terhadap Jumlah Penyewaan
+fig_temp, ax_temp = plt.subplots(figsize=(10, 6))
+sns.scatterplot(x='temp', y='cnt', hue='season', data=df, ax=ax_temp)
+ax_temp.set_title('Pengaruh Suhu terhadap Jumlah Penyewaan')
+ax_temp.set_xlabel('Suhu (Normalized)')
+ax_temp.set_ylabel('Jumlah Penyewaan')
+st.pyplot(fig_temp)
+
+# Visualisasi Pengaruh Cuaca terhadap Jumlah Penyewaan
+fig_weathersit, ax_weathersit = plt.subplots(figsize=(10, 6))
+sns.boxplot(x='weathersit', y='cnt', data=df, ax=ax_weathersit)
+ax_weathersit.set_title('Pengaruh Cuaca terhadap Jumlah Penyewaan')
+ax_weathersit.set_xlabel('Kondisi Cuaca')
+ax_weathersit.set_ylabel('Jumlah Penyewaan')
+st.pyplot(fig_weathersit)
+
 # Korelasi antara RFM
 fig_rfm, ax_rfm = plt.subplots(figsize=(10, 6))
 sns.heatmap(df[['recency', 'frequency', 'monetary']].corr(), annot=True, cmap='coolwarm', ax=ax_rfm)
 ax_rfm.set_title('RFM Correlation')
 st.pyplot(fig_rfm)
+
 
 # Clustering Manual (Binning)
 st.header('Clustering Manual: Pengelompokan Usia Pelanggan')
