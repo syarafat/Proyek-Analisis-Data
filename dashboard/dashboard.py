@@ -16,7 +16,7 @@ def load_data():
     df = pd.read_csv('data/day.csv')
     
     # Correct the mapping of season to season_name
-    season_mapping = {1: 'Spring', 2: 'Summer', 3: 'Fall', 4: 'Winter'}
+    season_mapping = {1: 'Musim Dingin', 2: 'Musim Semi', 3: 'Musim Panas', 4: 'Musim Gugur'}
     df['season_name'] = df['season'].map(season_mapping)
     
     # Map weekdays to names
@@ -31,6 +31,7 @@ def load_data():
     df['dteday'] = pd.to_datetime(df['dteday'])
     
     return df
+
 
 # Load data
 df = load_data()
